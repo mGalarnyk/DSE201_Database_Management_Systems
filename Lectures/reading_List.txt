@@ -1,0 +1,380 @@
+	    DATABASE SYSTEMS: THE COMPLETE BOOK 2nd Edition
+
+PART I: Relational Database Modeling
+
+2 The Relational Model of Data
+	2.1 An Overview of Data Models *
+		2.1.1 What is a Data Model?
+		2.1.3 The Relational Model in Brief 
+	2.2 Basics of the Relational Model **
+		2.2.1 Attributes
+		2.2.2 Schemas
+		2.2.3 Tuples
+		2.2.4 Domains
+		2.2.5 Equivalent Representations of a Relation
+		2.2.6 Relation Instances
+		2.2.7 Keys of Relations
+		2.2.8 An Example Database Schema
+	2.4 An Algebraic Query Language *
+		2.4.1 Why Do We Need a Special Query Language?
+		2.4.2 What is an Algebra?
+		2.4.3 Overview of Relational Algebra
+		2.4.4 Set Operations on Relations
+		2.4.5 Projection
+		2.4.6 Selection
+		2.4.7 Cartesian Product
+		2.4.8 Natural Joins
+		2.4.9 Theta-Joins
+		2.4.10 Combining Operations to Form Queries
+		2.4.11 Naming and Renaming
+		2.4.12 Relationships Among Operations
+		2.4.13 A Linear Notation for Algebraic Expressions
+
+3 Design Theory for Relational Databases
+	3.1 Functional Dependencies 
+		3.1.1 Definition of Functional Dependency
+		3.1.2 Keys of Relations
+	3.3 Design of Relational Database Schemas (PREREQ)
+		3.3.1 Anomalies
+		3.3.2 Decomposing Relations
+		3.3.3 Boyce-Codd Normal Form
+		3.3.4 Decomposition into BCNF
+
+PART II: Relational Database Programming
+
+5 Algebraic and Logical Query Languages
+	5.1 Relational Operations on Bags *
+		5.1.1 Why Bags?
+		5.1.2 Union, Intersection, and Difference of Bags
+		5.1.3 Projection of Bags
+		5.1.4 Selection on Bags
+		5.1.5 Product of Bags
+		5.1.6 Joins of Bags
+	5.2 Extended Operators of Relational Algebra *
+		5.2.1 Duplicate Elimination
+		5.2.2 Aggregation Operators
+		5.2.3 Grouping
+		5.2.4 The Grouping Operator
+		5.2.5 Extending the Projection Operator
+		5.2.6 The Sorting Operator
+		5.2.7 Outerjoins
+
+6 The Database Language SQL **
+	6.1 Simple Queries in SQL
+		6.1.1 Projection in SQL
+		6.1.2 Selection in SQL
+		6.1.3 Comparison of Strings
+		6.1.4 Pattern Matching in SQL
+		6.1.5 Dates and Times
+		6.1.6 Null Values and Comparisons Involving {\tt NULL}
+		6.1.7 The Truth-Value {\tt UNKNOWN}
+		6.1.8 Ordering the Output
+
+	6.2 Queries Involving More Than One Relation
+		6.2.1 Products and Joins in SQL
+		6.2.2 Disambiguating Attributes
+		6.2.3 Tuple Variables
+		6.2.4 Interpreting Multirelation Queries
+		6.2.5 Union, Intersection, and Difference of Queries
+
+	6.3 Subqueries
+		6.3.1 Subqueries that Produce Scalar Values
+		6.3.2 Conditions Involving Relations
+		6.3.3 Conditions Involving Tuples
+		6.3.4 Correlated Subqueries
+		6.3.5 Subqueries in {\tt FROM}\ Clauses
+		6.3.6 SQL Join Expressions
+		6.3.7 Natural Joins
+		6.3.8 Outerjoins
+
+	6.4 Full-Relation Operations
+		6.4.1 Eliminating Duplicates
+		6.4.2 Duplicates in Unions, Intersections, and Differences
+		6.4.3 Grouping and Aggregation in SQL
+		6.4.4 Aggregation Operators
+		6.4.5 Grouping
+		6.4.6 Grouping, Aggregation, and Nulls
+		6.4.7 {\tt HAVING} Clauses
+
+	6.5 Database Modifications
+		6.5.1 Insertion
+		6.5.2 Deletion
+		6.5.3 Updates
+
+	6.6 Transactions in SQL
+		6.6.1 Serializability
+		6.6.2 Atomicity
+		6.6.3 Transactions
+
+7 Constraints and Triggers *
+	7.1 Keys and Foreign Keys
+		7.1.1 Declaring Foreign-Key Constraints **
+                7.1.2 Maintaining referential integrity
+                7.1.3 Deferred Checking of Constraints
+
+8 Views and Indexes
+	8.1 Virtual Views **
+		8.1.1 Declaring Views
+		8.1.2 Querying Views
+		8.1.3 Renaming Attributes
+
+	8.3 Indexes in SQL **
+		8.3.1 Motivation for Indexes
+		8.3.2 Declaring Indexes
+
+	8.4 Selection of indices *
+		all subsubsections
+
+	8.5 Materialized Views
+		8.5.1 Maintaining a materialized view **
+		8.5.2 Periodic maintenance of materialized views **
+		8.5.3 Rewriting queries to use materialized views *
+		8.5.4 Automatic creation of materialized views *
+
+9 SQL in a Server Environment
+	9.6 JDBC *
+		all subsections
+
+PART IV: Database System Implementation
+
+13 Secondary Storage Management
+	13.1 The Memory Hierarchy *
+		13.1.1 The Memory Hierarchy
+		13.1.2 Transfer of Data Between Levels
+		13.1.3 Volatile and Nonvolatile Storage
+
+	13.2 Disks *
+		13.2.1 Mechanics of Disks
+		13.2.2 The Disk Controller
+		13.2.3 Disk Access Characteristics
+
+	13.3 Accelerating Access to Secondary Storage *
+		13.3.1 The I/O Model of Computation
+		13.3.2 Organizing Data by Cylinders
+
+	13.5 Arranging Data on Disk *
+		13.5.1 Fixed-Length Records
+		13.5.2 Packing Fixed-Length Records into Blocks
+
+	13.6 Representing Block and Record Addresses *
+		13.6.1 Addresses in Client-Server Systems
+		13.6.2 Logical and Structured Addresses
+		13.6.3 Pointer Swizzling
+		13.6.4 Returning Blocks to Disk
+		13.6.5 Pinned Records and Blocks
+
+        13.8 Record Modifications 
+		all subsections
+
+14 Index Structures 
+	14.1 Index-Structure Basics *
+		14.1.1 Sequential Files
+		14.1.2 Dense Indexes
+		14.1.3 Sparse Indexes
+		14.1.4 Multiple Levels of Index
+		14.1.5 Secondary Indexes
+		14.1.6 Applications of Secondary Indexes
+		14.1.7 Indirection in Secondary Indexes
+		14.1.8 Document Retrieval and Inverted Indexes
+	14.2 B-Trees **
+		14.2.1 The Structure of B-trees
+		14.2.2 Applications of B-trees
+		14.2.3 Lookup in B-Trees
+		14.2.4 Range Queries
+		14.2.5 Insertion Into B-Trees
+		14.2.6 Deletion From B-Trees
+		14.2.7 Efficiency of B-Trees
+                   Exercises 5, 9
+	14.3 Hash Tables *
+		14.3.1 Secondary-Storage Hash Tables
+		14.3.2 Insertion Into a Hash Table
+		14.3.3 Hash-Table Deletion
+		14.3.4 Efficiency of Hash Table Indexes
+		14.3.5 Extensible Hash Tables
+		14.3.6 Insertion Into Extensible Hash Tables
+		14.3.7 Linear Hash Tables
+		14.3.8 Insertion Into Linear Hash Tables
+                   Exercises 1, 4, 6
+	14.4 Multidimensional Indexes *
+		14.4.1 Applications of Multidimensional Indexes
+		14.4.2 Executing Range Queries Using Conventional Indexes
+		14.4.3 Executing Nearest-Neighbor Queries Using Conventional Indexes
+		14.4.4 Overview of Multidimensional Index Structures
+	14.7 Bitmap Indexes **
+		14.7.1 Motivation for Bitmap Indexes
+		14.7.2 Compressed Bitmaps
+		14.7.3 Operating on Run-Length-Encoded Bit-Vectors
+		14.7.4 Managing Bitmap Indexes
+                   Exercises 1, 4
+
+15 Query Execution
+	15.1 Introduction to Physical-Query-Plan Operators *
+		15.1.1 Scanning Tables *
+		15.1.2 Sorting While Scanning Tables *
+		15.1.3 The Computation Model for Physical Operators
+		15.1.4 Parameters for Measuring Costs
+		15.1.5 I/O Cost for Scan Operators
+		15.1.6 Iterators for Implementation of Physical Operators
+	15.2 One-Pass Algorithms *
+		15.2.1 One-Pass Algorithms for Tuple-at-a-Time Operations
+		15.2.2 One-Pass Algorithms for Unary, Full-Relation Operations
+		15.2.3 One-Pass Algorithms for Binary Operations
+                   Exercises 2, 4
+	15.3 Nested-Loop Joins *
+		15.3.1 Tuple-Based Nested-Loop Join
+		15.3.2 An Iterator for Tuple-Based Nested-Loop Join
+		15.3.3 Block-Based Nested-Loop Join Algorithm
+		15.3.4 Analysis of Nested-Loop Join
+	15.4 Two-Pass Algorithms Based on Sorting *
+		15.4.1 Two-Phase, Multiway Merge-Sort
+		15.4.2 Duplicate Elimination Using Sorting
+		15.4.3 Grouping and Aggregation Using Sorting
+		15.4.4 A Sort-Based Union Algorithm *
+		15.4.5 Sort-Based Intersection and Difference *
+		15.4.6 A Simple Sort-Based Join Algorithm
+		15.4.7 Analysis of Simple Sort-Join
+		15.4.8 A More Efficient Sort-Based Join
+                   Exercises 4, 5, 7
+	15.5 Two-Pass Algorithms Based on Hashing **
+		15.5.1 Partitioning Relations by Hashing
+		15.5.2 A Hash-Based Algorithm for Duplicate Elimination
+		15.5.3 Hash-Based Grouping and Aggregation
+		15.5.4 Hash-Based Union, Intersection, and Difference *
+		15.5.5 The Hash-Join Algorithm
+		15.5.6 Saving Some Disk I/O's *
+                   Exercises 2
+	15.6 Index-Based Algorithms **
+		15.6.1 Clustering and Nonclustering Indexes
+		15.6.2 Index-Based Selection
+		15.6.3 Joining by Using an Index
+		15.6.4 Joins Using a Sorted Index *
+                   Exercises 1, 2, 4, 5
+	15.8 Algorithms Using More Than Two Passes *
+		15.8.1 Multipass Sort-Based Algorithms
+		15.8.2 Performance of Multipass, Sort-Based Algorithms
+		15.8.3 Multipass Hash-Based Algorithms
+		15.8.4 Performance of Multipass Hash-Based Algorithms
+
+16 The Query Compiler
+	16.1 Parsing and Preprocessing *
+		16.1.1 Syntax Analysis and Parse Trees
+		16.1.2 A Grammar for a Simple Subset of SQL
+		16.1.3 The Preprocessor
+		16.1.4 Preprocessing Queries Involving Views
+	16.2 Algebraic Laws for Improving Query Plans **
+		16.2.1 Commutative and Associative Laws
+		16.2.2 Laws Involving Selection
+		16.2.3 Pushing Selections
+		16.2.4 Laws Involving Projection
+		16.2.5 Laws About Joins and Products
+		16.2.6 Laws Involving Duplicate Elimination
+		16.2.7 Laws Involving Grouping and Aggregation
+                   Exercises 1-5, 8, 9
+	16.3 From Parse Trees to Logical Query Plans *
+		16.3.1 Conversion to Relational Algebra
+		16.3.2 Removing Subqueries From Conditions
+		16.3.3 Improving the Logical Query Plan **
+		16.3.4 Grouping Associative/Commutative Operators
+                   Exercises 1, 3, 4
+	16.4 Estimating the Cost of Operations **
+		16.4.1 Estimating Sizes of Intermediate Relations
+		16.4.2 Estimating the Size of a Projection
+		16.4.3 Estimating the Size of a Selection
+		16.4.4 Estimating the Size of a Join
+		16.4.5 Natural Joins With Multiple Join Attributes
+		16.4.6 Joins of Many Relations
+		16.4.7 Estimating Sizes for Other Operations *
+                   Exercises 1-3
+	16.5 Introduction to Cost-Based Plan Selection *
+		16.5.1 Obtaining Estimates for Size Parameters
+		16.5.2 Computation of Statistics
+		16.5.3 Heuristics for Reducing the Cost of Logical Query Plans
+		16.5.4 Approaches to Enumerating Physical Plans
+	16.6 Choosing an Order for Joins *
+		16.6.1 Significance of Left and Right Join Arguments
+		16.6.2 Join Trees
+		16.6.3 Left-Deep Join Trees
+		16.6.4 Dynamic Programming to Select a Join Order and Grouping
+		16.6.5 Dynamic Programming With More Detailed Cost Functions
+		16.6.6 A Greedy Algorithm for Selecting a Join Order
+                   Exercises 1, 7
+	16.7 Completing the Physical-Query-Plan **
+		16.7.1 Choosing a Selection Method
+		16.7.2 Choosing a Join Method
+		16.7.3 Pipelining Versus Materialization
+		16.7.4 Pipelining Unary Operations
+		16.7.5 Pipelining Binary Operations
+		16.7.6 Notation for Physical Query Plans
+		16.7.7 Ordering of Physical Operations
+                   Exercises 1
+
+17 Coping With System Failures *
+	17.1 Issues and Models for Resilient Operation 
+		17.1.1 Failure Modes
+		17.1.2 More About Transactions
+		17.1.3 Correct Execution of Transactions
+		17.1.4 The Primitive Operations of Transactions
+	17.2 Undo Logging
+		17.2.1 Log Records
+		17.2.2 The Undo-Logging Rules
+		17.2.3 Recovery Using Undo Logging
+		17.2.4 Checkpointing *
+		17.2.6 Exercises 1-6
+	17.3 Redo Logging
+		17.3.1 The Redo-Logging Rule
+		17.3.2 Recovery With Redo Logging
+		17.3.3 Checkpointing a Redo Log *
+		17.3.4 Recovery With a Checkpointed Redo Log *
+		17.3.5 Exercises 1-4
+	17.4 Undo/Redo Logging
+		17.4.1 The Undo/Redo Rules
+		17.4.2 Recovery With Undo/Redo Logging
+		17.4.3 Checkpointing an Undo/Redo Log *
+		17.4.4 Exercises 1-4
+
+18 Concurrency Control *
+	18.1 Serial and Serializable Schedules
+		18.1.1 Schedules
+		18.1.2 Serial Schedules
+		18.1.3 Serializable Schedules
+		18.1.4 The Effect of Transaction Semantics
+		18.1.5 A Notation for Transactions and Schedules
+	18.2 Conflict-Serializability
+		18.2.1 Conflicts
+		18.2.2 Precedence Graphs and a Test for Conflict-Serializability
+		18.2.3 Why the Precedence-Graph Test Works
+		18.2.4 Exercises 1-5
+	18.3 Enforcing Serializability by Locks
+		18.3.1 Locks
+		18.3.2 The Locking Scheduler
+		18.3.3 Two-Phase Locking
+		18.3.4 Why Two-Phase Locking Works
+		18.3.5 Exercises 1.a, 2-4
+	18.4 Locking Systems With Several Lock Modes
+		18.4.1 Shared and Exclusive Locks
+		18.4.2 Compatibility Matrices
+		18.4.3 Upgrading Locks
+		18.4.4 Update Locks
+		18.4.5 Increment Locks
+		18.4.6 Exercises 1-5
+	18.5 An Architecture for a Locking Scheduler *
+		18.5.1 A Scheduler That Inserts Lock Actions
+		18.5.2 The Lock Table
+	18.6 Hierarchies of Database Elements
+		18.6.1 Locks With Multiple Granularity
+		18.6.2 Warning Locks
+		18.6.3 Phantoms and Handling Insertions Correctly
+		18.6.4 Exercises 1,2
+	18.7 The Tree Protocol
+		18.7.1 Motivation for Tree-Based Locking
+		18.7.2 Rules for Access to Tree-Structured Data
+		18.7.3 Why the Tree Protocol Works
+		18.7.4 Exercises 1,2
+	18.8 Concurrency Control by Timestamps
+		18.8.1 Timestamps
+		18.8.2 Physically Unrealizable Behaviors
+		18.8.3 Problems With Dirty Data
+		18.8.4 The Rules for Timestamp-Based Scheduling
+		18.8.5 Multiversion Timestamps
+		18.8.6 Timestamps Versus Locking
+		18.8.7 Exercises 1,2
