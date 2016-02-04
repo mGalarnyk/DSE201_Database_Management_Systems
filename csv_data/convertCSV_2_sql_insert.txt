@@ -1,0 +1,3 @@
+If you want to convert csv data to sql insert statements,
+I really like this 
+http://www.convertcsv.com/csv-to-sql.html
