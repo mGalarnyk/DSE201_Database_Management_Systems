@@ -22,7 +22,7 @@ CREATE TABLE cats.watch
 (
   watch_id serial primary key NOT NULL,
   video_id integer references cats.video (video_id) NOT NULL,
-  user_id integer integer references cats."user" (user_id) NOT NULL,
+  user_id integer references cats."user" (user_id) NOT NULL,
   "time" timestamp without time zone NOT NULL
 );
 
