@@ -1,0 +1,37 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1348\cocoasubrtf170
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\froman\fcharset0 TimesNewRomanPSMT;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\fs24 \cf0 \'97 Cats \
+\
+\'97 1. \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\sl276\slmult1\sa200
+
+\f1 \cf0 \expnd0\expndtw0\kerning0
+SELECT video_id, COUNT(*) AS like_no FROM cats.likes GROUP BY video_id ORDER BY like_no DESC LIMIT 10; \
+\'97 2. \
+SELECT l.video_id, COUNT(*) AS like_no FROM cats.friend f, cats.like l\
+WHERE f.user_id=1 AND f.friend_id=l.user_id GROUP BY l.video_id ORDER BY like_no DESC LIMIT 10\
+\'97 3. \
+SELECT l.video, COUNT(*)\
+FROM (SELECT l.video_id AS video, l.user_id AS user1 FROM cats.friend f, cats.like l WHERE f.user_id=1 AND f.friend_id=l.user_id \
+UNION\
+SELECT l.video_id AS video, l.user_id AS user1 FROM cats.friend f, cats.friend ff, cats.like l WHERE f.user_id=1 AND f.friend_id=ff.user_id AND ff.user_id=l.user_id\
+) AS l\
+GROUP BY l.video\
+ORDER BY COUNT(*) DESC LIMIT 10\
+\'97 4. \
+SELECT l.video_id, COUNT(*) FROM cats.like l\
+WHERE l.user_id IN (SELECT ly.user_id FROM cats.like lx, cats.like ly WHERE lx.user_id=1 AND lx.video_id=ly.video_id) GROUP BY l.video_id\
+ORDER BY COUNT(*) DESC LIMIT 10\
+\'97 5.\
+WITH WeightOfUsers AS\
+(SELECT ly.user_id, LOG(1+COUNT(*)) AS weight FROM cats.like lx, cats.like ly\
+WHERE lx.user_id=1 AND lx.video_id=ly.video_id GROUP BY ly.user_id)\
+SELECT l.video_id, SUM(w.weight) AS sum_weight FROM cats.like l,  WeightOfUsers w\
+WHERE l.user_id=w.user_id GROUP BY l.video_id\
+ORDER BY sum_weight DESC LIMIT 10\
+}
