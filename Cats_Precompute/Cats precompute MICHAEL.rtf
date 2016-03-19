@@ -1,0 +1,72 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1348\cocoasubrtf170
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\fs24 \cf0 New Query: \
+Cats\
+\
+WITH WeightOfUsers\
+As \
+(\
+	SELECT y_user_id user_id, log(sum(1+weight)) weight\
+	FROM cats.PRE_WeightOfUsers\
+	WHERE x_user_id = 30442\
+	GROUP BY y_user_id\
+)\
+SELECT l.video_id, SUM(w.weight) sum_weight\
+FROM cats.like l, WeightOfUsers w \
+WHERE l.user = w.weight\
+GROUP BY l.video_id\
+ORDER BY sum_weight DESC LIMIT 10\
+\
+Pre-Computation: \
+\pard\pardeftab720\ri0
+\cf0 DROP TABLE IF EXISTS cats.PRE_WeightOfUsers;\
+CREATE TABLE cats.PRE_WeightOfUsers   AS 	\
+SELECT lx.user_id AS x_user_id,\
+	ly.user_id AS y_user_id,\
+	COUNT(*) AS weight\
+FROM cats.LIKE lx\
+	,cats.LIKE ly\
+WHERE lx.video_id = ly.video_id\
+GROUP BY lx.user_id, ly.user_id;\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+Create Index: \
+CREATE INDEX pre_weightofusers_x_user_id_idx\
+ON cats.pre_weightofusers\
+USING btree\
+(x_user_id); \
+\
+CREATE INDEX pre_weightofusers_x_user_id_y_user_id_weight_idx\
+ON cats.pre_weightofusers\
+USING btree\
+(x_user_id, y_user_id, weight);\
+\
+CREATE INDEX like_video_id_user_id_idx\
+ON cats."like"\
+USING btree\
+(video_id, user_id);\
+\
+NEW QUERY: \
+WITH WeightOfUsers\
+AS (\
+	SELECT y_user_id user_id, \
+	log(sum(1+weight)) weight\
+	FROM cats.PRE_WeightOfUsers\
+	WHERE x_user_id = 30442\
+	GROUP BY y_user_id\
+	)\
+\
+SELECT l.video_id, SUM(w.weight) sum_weight\
+FROM cats.LIKE l, WeightOfUsers w \
+WHERE l.user_id = w.user_id\
+GROUP BY l.video_id\
+ORDER BY sum_weight DESC LIMIT 10\
+\
+\
+\
+\
+}
