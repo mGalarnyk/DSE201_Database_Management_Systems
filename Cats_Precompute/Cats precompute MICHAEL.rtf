@@ -50,6 +50,86 @@ ON cats."like"\
 USING btree\
 (video_id, user_id);\
 \
+\
+Trigger: \
+\pard\pardeftab720\ri0\sb40
+\cf0 CREATE or replace FUNCTION cats.FN_PRE_WeightOfUsers() RETURNS trigger AS $FN_PRE_WeightOfUsers$\
+    BEGIN\
+    	CREATE TEMP TABLE users as \
+	SELECT user_id\
+		FROM cats.LIKE\
+		WHERE video_id = NEW.video_id\
+\
+		UNION\
+\
+		SELECT NEW.user_id;\
+		\
+	WITH U AS (\
+		SELECT user_id\
+		FROM users\
+	)\
+	UPDATE CATS.PRE_WeightOfUsers\
+	SET weight = weight + 1\
+	WHERE (\
+			x_user_id IN (\
+				SELECT user_id\
+				FROM U\
+				)\
+			AND y_user_id = NEW.user_id\
+			)\
+		OR (\
+			y_user_id IN (\
+				SELECT user_id\
+				FROM U\
+				)\
+			AND x_user_id = NEW.user_id\
+			);\
+\
+	WITH U AS (\
+		SELECT user_id\
+		FROM users\
+	), I as (\
+		SELECT u.user_id as x_user_id, NEW.user_id as y_user_id\
+		FROM U\
+		\
+		UNION\
+		\
+		SELECT NEW.user_id as x_user_id , u.user_id as y_user_id\
+		FROM U\
+		\
+		UNION\
+		\
+		SELECT NEW.user_id as x_user_id, NEW.user_id as y_user_id\
+	), X as (\
+		SELECT *\
+		FROM I\
+\
+		EXCEPT\
+\
+		SELECT x_user_id\
+			,y_user_id\
+		FROM Cats.PRE_WeightOfUsers\
+	)\
+	INSERT INTO cats.PRE_WeightOfUsers (\
+		x_user_id\
+		,y_user_id\
+		,weight\
+		)\
+	SELECT *\
+		,1\
+	FROM X;\
+	\
+	RETURN NEW;\
+    END;\
+$FN_PRE_WeightOfUsers$ LANGUAGE plpgsql;\
+\
+DROP TRIGGER IF EXISTS trigger_LIKE ON CATS.LIKE ;\
+CREATE TRIGGER trigger_LIKE \
+BEFORE INSERT ON CATS.LIKE \
+FOR EACH ROW EXECUTE PROCEDURE cats.FN_PRE_WeightOfUsers();\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\
 NEW QUERY: \
 WITH WeightOfUsers\
 AS (\

@@ -1,0 +1,205 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1348\cocoasubrtf170
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\froman\fcharset0 TimesNewRomanPSMT;}
+{\colortbl;\red255\green255\blue255;\red31\green77\blue120;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+
+\f0\fs24 \cf0 \'97 Old Query\
+\
+\pard\pardeftab720\ri0
+\cf0 SELECT cate.category_id\
+	,cust.customer_id\
+	,sum(quantity)\
+	,sum(price)\
+FROM (\
+	SELECT category_id\
+		,sum(price) AS dollar_value\
+	FROM sales.category NATURAL\
+	INNER JOIN sales.product NATURAL\
+	INNER JOIN sales.sale\
+	GROUP BY category_id\
+	ORDER BY dollar_value DESC limit 10\
+	) AS cate\
+	,(\
+		SELECT customer_id\
+			,sum(price) AS dollar_value\
+		FROM sales.sale\
+		GROUP BY customer_id\
+		ORDER BY dollar_value DESC limit 10\
+		) AS cust\
+	,sales.sale s\
+	,sales.product p\
+WHERE p.category_id = cate.category_id\
+	AND s.customer_id = cust.customer_id\
+	AND s.product_id = p.product_id\
+GROUP BY cate.category_id\
+	,cust.customer_id\
+ORDER BY cate.category_id\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\'97 "Sort  (cost=170732.28..170732.48 rows=80 width=18)"\
+\
+\'97 New Query \
+\
+\pard\pardeftab720\ri0
+\cf0 WITH cate AS (\
+	SELECT category_id\
+	FROM sales.PRE_Category_Sale\
+	ORDER BY dollar_value DESC limit 10\
+	) \
+	,cust as (\
+		SELECT customer_id\
+		FROM sales.PRE_Customer_Sale\
+		ORDER BY dollar_value DESC limit 10\
+		) \
+SELECT cate.category_id\
+	,cust.customer_id\
+	,sum(quantity)\
+	,sum(price)\
+FROM cate\
+	,cust\
+	,sales.sale s\
+	,sales.product p\
+WHERE p.category_id = cate.category_id\
+	AND s.customer_id = cust.customer_id\
+	AND s.product_id = p.product_id\
+GROUP BY cate.category_id\
+	,cust.customer_id\
+ORDER BY cate.category_id\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\'97 "Sort  (cost=15796.75..15797.00 rows=100 width=18)"\
+\
+\
+\'97 precomputation\
+\
+\pard\pardeftab720\ri0
+\cf0 DROP TABLE IF EXISTS sales.PRE_Category_Sale ;\
+create table sales.PRE_Category_Sale as \
+	SELECT category_id\
+		,sum(price) AS dollar_value\
+	FROM sales.category NATURAL\
+	INNER JOIN sales.product NATURAL\
+	INNER JOIN sales.sale\
+	GROUP BY category_id;\
+\
+DROP TABLE IF EXISTS sales.PRE_Customer_Sale;  \
+create table sales.PRE_Customer_Sale as \
+	SELECT customer_id\
+		,sum(price) AS dollar_value\
+	FROM sales.sale\
+	GROUP BY customer_id;\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\
+Create Index: \
+\
+\
+\pard\pardeftab720\ri0\sb40
+\cf2 DROP INDEX sales.pre_category_sale_dollar_value_category_id_idx;\
+CREATE INDEX pre_category_sale_dollar_value_category_id_idx\
+  ON sales.pre_category_sale\
+  USING btree\
+  (dollar_value DESC, category_id);\cf0 \
+\pard\pardeftab720\li720\ri0
+\cf0 \
+\pard\pardeftab720\ri0\sb40
+\cf2 DROP INDEX IF EXISTS sales.\cf0 product_category_id_product_id_idx;\cf2 \
+\pard\pardeftab720\li720\ri0
+\cf0 CREATE INDEX product_category_id_product_id_idx\
+  ON sales.product\
+  USING btree\
+  (category_id, product_id);\
+\pard\tx5280\pardeftab720\ri0\sb40
+
+\f1 \cf2 	\
+\pard\pardeftab720\ri0\sb40
+
+\f0 \cf2 DROP INDEX IF EXISTS sales.\cf0 product_product_id_category_id_idx;
+\f1 \cf2 \
+\pard\pardeftab720\li720\ri0
+
+\f0 \cf0 CREATE INDEX product_product_id_category_id_idx\
+  ON sales.product\
+  USING btree\
+  (product_id, category_id);\
+\pard\pardeftab720\ri0\sb40
+\cf2 \
+DROP INDEX sales.\cf0 sale_product_id_quantity_price_idx;\cf2 \
+\pard\pardeftab720\li720\ri0
+\cf0 CREATE INDEX sale_product_id_quantity_price_idx\
+  ON sales.sale\
+  USING btree\
+  (product_id, quantity, price);\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\
+Trigger: \
+\
+\pard\pardeftab720\ri0
+\cf0 CREATE or replace FUNCTION sales.FN_PRE_Category_Sale() RETURNS trigger AS $FN_PRE_Category_Sale$\
+    BEGIN\
+	UPDATE sales.PRE_Category_Sale as pre\
+		SET dollar_value = pre.dollar_value + NEW.price\
+	FROM  sales.product as p\
+	WHERE pre.category_id = p.category_Id\
+	AND p.product_id =  NEW.product_id;\
+	IF NOT FOUND THEN\
+	--no category_id updated\
+		INSERT INTO sales.PRE_Category_Sale (category_id, dollar_value)\
+		SELECT p.category_id, NEW.price\
+		FROM sales.product p\
+		WHERE p.product_id = NEW.product_id;\
+	END IF;\
+	RETURN NEW;\
+    END;\
+$FN_PRE_Category_Sale$ LANGUAGE plpgsql;\
+\
+DROP TRIGGER IF EXISTS trigger_Sale_Category ON sales.sale ;\
+CREATE TRIGGER trigger_Sale_Category \
+BEFORE INSERT ON sales.sale \
+FOR EACH ROW EXECUTE PROCEDURE sales.FN_PRE_Category_Sale();\
+\
+CREATE or replace FUNCTION sales.FN_PRE_Customer_Sale() RETURNS trigger AS $FN_PRE_Customer_Sale$\
+    BEGIN\
+	UPDATE sales.PRE_Customer_Sale\
+		SET dollar_value = dollar_value + NEW.price\
+	WHERE customer_id = NEW.customer_id;\
+	\
+	IF NOT FOUND THEN\
+	--no category_id updated\
+		INSERT INTO sales.PRE_Customer_Sale (customer_id, dollar_value)\
+		SELECT NEW.customer_id, NEW.price;\
+	END IF;\
+	RETURN NEW;\
+    END;\
+$FN_PRE_Customer_Sale$ LANGUAGE plpgsql;\
+\
+DROP TRIGGER IF EXISTS trigger_Sale_Customer ON sales.sale ;\
+CREATE TRIGGER trigger_Sale_Customer\
+BEFORE INSERT ON sales.sale \
+FOR EACH ROW EXECUTE PROCEDURE sales.FN_PRE_Customer_Sale();\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural
+\cf0 \
+\
+NEW QUERY: \
+WITH WeightOfUsers\
+AS (\
+	SELECT y_user_id user_id, \
+	log(sum(1+weight)) weight\
+	FROM cats.PRE_WeightOfUsers\
+	WHERE x_user_id = 30442\
+	GROUP BY y_user_id\
+	)\
+\
+SELECT l.video_id, SUM(w.weight) sum_weight\
+FROM cats.LIKE l, WeightOfUsers w \
+WHERE l.user_id = w.user_id\
+GROUP BY l.video_id\
+ORDER BY sum_weight DESC LIMIT 10\
+\
+\
+\
+\
+}
